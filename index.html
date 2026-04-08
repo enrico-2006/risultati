@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Risultati Calcio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h2 class="mb-4">Gestione partite calcio</h2>
+    <h3 class="mb-4">Aggiungi partita</h3>
+    <form action="/api/partite" method="post" class="row g-3 mb-5">
+        <div class="col-auto">
+            <input type="date" name="data" class="form-control" required>
+        </div>
+        <div class="col-auto">
+            <input type="time" name="ora" class="form-control" required>
+        </div>
+        <div class="col-auto">
+            <input type="text" name="team1" class="form-control" placeholder="Squadra casa" required>
+        </div>
+        <div class="col-1">
+            <input type="number" name="score1" class="form-control" min="0" required>
+        </div>
+        <div class="col-1 text-center">-</div>
+        <div class="col-1">
+            <input type="number" name="score2" class="form-control" min="0" required>
+        </div>
+        <div class="col-auto">
+            <input type="text" name="team2" class="form-control" placeholder="Squadra trasferta" required>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Aggiungi</button>
+        </div>
+
+    </form> 
+    <h3 class="mt-5">Storico Partite</h3>
+    <div class="list-group">
+        {% for p in partite_elenco %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <form action="/api/partita/{{ p.id }}" method="post" class="d-flex align-items-center w-100">
+                <div class="col-2 text-end pe-3">
+                    <strong>{{ p.data }} {{ p.ora }} </strong>
+                </div>
+                <div class="col-3 text-end pe-3">
+                    <strong>{{ p.team1 }}</strong>
+                </div>
+                
+                <div class="col-1">
+                    <input type="number" name="nuovo_gol_casa" class="form-control form-control-sm text-center" value="{{ p.score1 }}" min="0">
+                </div>
+                
+                <div class="col-1 text-center">-</div>
+                
+                <div class="col-1">
+                    <input type="number" name="nuovo_gol_trasferta" class="form-control form-control-sm text-center" value="{{ p.score2 }}" min="0">
+                </div>
+                
+                <div class="col-3 ps-3">
+                    <strong>{{ p.team2 }}</strong>
+                </div>
+
+                <div class="col-1">
+                    <button type="submit" class="btn btn-warning">Aggiorna</button>
+                </div>
+
+            </form>
+            <form action="/api/partita/elimina/{{p.id}}" method="post">
+                <div class="col-1">
+                    <button type="submit" class="btn btn-danger">Rimuovi</button>
+                </div>
+            </form>   
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
