@@ -45,7 +45,7 @@ async def api(request: Request, db: Session = Depends(get_db)):
     subq1 = (select(Squadre.nome).where(Partite.team1 == Squadre.id).scalar_subquery())
     subq2 = (select(Squadre.nome).where(Partite.team2 == Squadre.id).scalar_subquery())
     risultati = db.query(Partite.id, func.strftime("%d-%m-%Y", Partite.data).label("data"), Partite.ora, (subq1.label("team1")), (subq2.label("team2")), Partite.score1, Partite.score2).order_by(Partite.data.desc(), Partite.ora.desc())
-    return templates.TemplateResponse("index.html", {"request": request, "risultati": risultati, "partite_elenco": risultati})
+    return templates.TemplateResponse("index.html", {"request": request, "partite_elenco": risultati})
 
 @app.post("/api/partite")
 def aggiungi(data: str = Form(...), ora: str = Form(...), team1: str = Form(...), team2: str = Form(...), score1: int = Form(...), score2: int = Form(...), db: Session = Depends(get_db)):
